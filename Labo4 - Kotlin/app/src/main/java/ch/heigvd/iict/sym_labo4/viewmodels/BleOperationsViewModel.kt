@@ -129,7 +129,10 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
                           caractéristiques (déclarés en lignes 39 à 44)
                         */
 
-                        return false //FIXME si tout est OK, on retourne true, sinon la librairie appelera la méthode onDeviceDisconnected() avec le flag REASON_NOT_SUPPORTED
+                        //onDeviceDisconnected(REASON_NOT_SUPPORTED)
+
+                        return true
+                        //return false //FIXME si tout est OK, on retourne true, sinon la librairie appelera la méthode onDeviceDisconnected() avec le flag REASON_NOT_SUPPORTED
                     }
 
                     override fun initialize() {
