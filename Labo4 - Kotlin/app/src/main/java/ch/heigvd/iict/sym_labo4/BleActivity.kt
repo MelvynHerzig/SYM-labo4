@@ -16,12 +16,12 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
-import java.util.*
 
 /**
  * Project: Labo4
  * Created by fabien.dutoit on 11.05.2019
  * Updated by fabien.dutoit on 06.11.2020
+ * Updated by Berney Alec & Forestier Quentin & Herzig Melvyn on 21.12.2021
  * (C) 2019 - HEIG-VD, IICT
  */
 class BleActivity : BaseTemplateActivity() {
@@ -152,9 +152,8 @@ class BleActivity : BaseTemplateActivity() {
             builderScanSettings.setReportDelay(0)
 
             //we scan for any BLE device
-            //we don't filter them based on advertised services...
-            // TODO ajouter un filtre pour n'afficher que les devices proposant
-            // le service "SYM" (UUID: "3c0a1000-281d-4b48-b2a7-f15579a1c38f")
+            //we filter them based on advertised service:
+            //"SYM" (UUID: "3c0a1000-281d-4b48-b2a7-f15579a1c38f")
             val uuidFilter = ScanFilter.Builder()
                 .setServiceUuid(ParcelUuid.fromString(("3c0a1000-281d-4b48-b2a7-f15579a1c38f")))
                 .build()
