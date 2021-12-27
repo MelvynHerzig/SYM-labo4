@@ -22,6 +22,7 @@ import java.util.*
  * Project: Labo4
  * Created by fabien.dutoit on 11.05.2019
  * Updated by fabien.dutoit on 18.10.2021
+ * Updated by Alec Berney & Quentin Forestier & Melvyn Herzig on 26.12.2021
  * (C) 2019 - HEIG-VD, IICT
  */
 class BleOperationsViewModel(application: Application) : AndroidViewModel(application) {
@@ -80,6 +81,9 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
         d'interagir avec le périphérique depuis l'activité
      */
 
+    /**
+     * Read the temperature from the ble device using ble manager
+     */
     fun readTemperature(): Boolean {
         if (!isConnected.value!! || temperatureChar == null)
             return false
@@ -87,6 +91,10 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
             return ble.readTemperature()
     }
 
+    /**
+     * Send an integer using the ble manager
+     * @param integer integer to send
+     */
     fun sendInteger(integer: Int): Boolean {
         if (!isConnected.value!! || integerChar == null)
             return false
@@ -94,6 +102,10 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
             return ble.sendInteger(integer)
     }
 
+    /**
+     * Set date using the ble manager
+     * @param calendar Date to set
+     */
     fun setDate(calendar: Calendar): Boolean {
         if (!isConnected.value!! || currentTimeChar == null)
             return false
@@ -155,8 +167,6 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
                     public override fun isRequiredServiceSupported(gatt: BluetoothGatt): Boolean {
                         mConnection = gatt //trick to force disconnection
 
-                        Log.d(TAG, "isRequiredServiceSupported - TODO")
-
                         /*
                         - Nous devons vérifier ici que le périphérique auquel on vient de se connecter possède
                           bien tous les services et les caractéristiques attendues, on vérifiera aussi que les
@@ -171,7 +181,6 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
                                 symService != null && temperatureChar != null && buttonClickChar != null && integerChar != null
                                 )
 
-                        //return false //FIXME si tout est OK, on retourne true, sinon la librairie appelera la méthode onDeviceDisconnected() avec le flag REASON_NOT_SUPPORTED
                     }
 
                     override fun initialize() {
@@ -188,7 +197,6 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
 
 
                         setNotificationCallback(currentTimeChar).with { _: BluetoothDevice, data: Data ->
-
 
                             currenttimeValue.value = String.format(
                                 "%02d/%02d/%02d %02d:%02d:%02d",
@@ -221,6 +229,10 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
             return mGattCallback!!
         }
 
+        /**
+         * Init the supported services using their UUID
+         * @param services List of services available
+         */
         private fun initServices(services: List<BluetoothGattService>) {
             for (service in services) {
 
@@ -238,6 +250,10 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
             }
         }
 
+        /**
+         * Init the supported characteristics of Time service using their UUID
+         * @param characteristics List of characteristics of Time service
+         */
         private fun initTimeCharacteristics(characteristics: List<BluetoothGattCharacteristic>) {
             for (char in characteristics) {
                 when (char.uuid) {
@@ -246,6 +262,10 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
             }
         }
 
+        /**
+         * Init the supported characteristics of SYM service using their UUID
+         * @param characteristics List of characteristics of SYM service
+         */
         private fun initSYMCharacteristics(characteristics: List<BluetoothGattCharacteristic>) {
             for (char in characteristics) {
                 when (char.uuid) {
@@ -256,6 +276,11 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
             }
         }
 
+        /**
+         * Convert calendar object to byte array for the value supported by the ble device
+         * @param calendar Calendar to convert
+         * @return Byte array who contain the date
+         */
         private fun calendarToByteArray(calendar: Calendar): ByteArray {
 
 
@@ -287,6 +312,10 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
             )
         }
 
+        /**
+         * Read the temperature on the ble device connected
+         * @return true if everything went well
+         */
         fun readTemperature(): Boolean {
             /*
                 on peut effectuer ici la lecture de la caractéristique température
@@ -306,6 +335,11 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
             }
         }
 
+        /**
+         * Send an integer to the ble device connected
+         * @param integer integer to send
+         * @return true if everything went well
+         */
         fun sendInteger(integer: Int): Boolean {
             return if (integerChar != null) {
                 integerChar!!.setValue(integer, Data.FORMAT_UINT32, 0)
@@ -316,6 +350,11 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
             }
         }
 
+        /**
+         * Set the current time in the ble device connected
+         * @param calendar Date to set
+         * @return true if everything went well
+         */
         fun setDate(calendar: Calendar): Boolean {
             return if (currentTimeChar != null) {
 

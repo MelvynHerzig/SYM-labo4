@@ -216,6 +216,9 @@ class BleActivity : BaseTemplateActivity() {
         }
     }
 
+    /**
+     * Update the value returned by the bluetooth device
+     */
     private fun updateValue(){
         temperatureText.text = bleViewModel.temperatureValue.value
         currenttimeText.text = bleViewModel.currenttimeValue.value
