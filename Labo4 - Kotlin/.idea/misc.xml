@@ -3,10 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/alecb/Google Drive/Semestre 5/SYM/Labos/Labo 4/SYM-labo4/Labo4 - Kotlin/app/src/main/res/layout/activity_ble.xml" value="0.25" />
-        <entry key="..\:/Users/alecb/Google Drive/Semestre 5/SYM/Labos/Labo 4/SYM-labo4/Labo4 - Kotlin/app/src/main/res/layout/activity_compass.xml" value="0.25" />
-        <entry key="..\:/Users/alecb/Google Drive/Semestre 5/SYM/Labos/Labo 4/SYM-labo4/Labo4 - Kotlin/app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="..\:/Users/alecb/Google Drive/Semestre 5/SYM/Labos/Labo 4/SYM-labo4/Labo4 - Kotlin/app/src/main/res/layout/scan_item.xml" value="0.25" />
+        <entry key="..\:/HEIG-VD/BA5/SYM/Labos/SYM-labo4/Labo4 - Kotlin/app/src/main/res/layout/activity_ble.xml" value="0.1" />
       </map>
     </option>
   </component>

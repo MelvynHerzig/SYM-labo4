@@ -16,6 +16,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import java.util.*
 
 /**
  * Project: Labo4
@@ -36,6 +37,17 @@ class BleActivity : BaseTemplateActivity() {
     private lateinit var scanPanel: View
     private lateinit var scanResults: ListView
     private lateinit var emptyScanResults: TextView
+
+    private lateinit var temperatureText: TextView
+    private lateinit var temperatureButton: Button
+
+    private lateinit var clickCounterText: TextView
+
+    private lateinit var currenttimeText: TextView
+    private lateinit var currenttimeButton: Button
+
+    private lateinit var sendvalueInput: EditText
+    private lateinit var sendvalueButton: Button
 
     //menu elements
     private var scanMenuBtn: MenuItem? = null
@@ -62,6 +74,17 @@ class BleActivity : BaseTemplateActivity() {
         scanResults = findViewById(R.id.ble_scanresults)
         emptyScanResults = findViewById(R.id.ble_scanresults_empty)
 
+        temperatureText = findViewById(R.id.ble_temperature_text)
+        temperatureButton = findViewById(R.id.ble_temperature_button)
+
+        clickCounterText = findViewById(R.id.ble_clickcounter_text)
+
+        currenttimeText = findViewById(R.id.ble_currenttime_text)
+        currenttimeButton = findViewById(R.id.ble_currenttime_button)
+
+        sendvalueInput = findViewById(R.id.ble_sendvalue_input)
+        sendvalueButton = findViewById(R.id.ble_sendvalue_button)
+
         //manage scanned item
         scanResultsAdapter = ResultsAdapter(this)
         scanResults.adapter = scanResultsAdapter
@@ -82,8 +105,24 @@ class BleActivity : BaseTemplateActivity() {
             }
         }
 
+        currenttimeButton.setOnClickListener {
+            bleViewModel.setDate(Calendar.getInstance())
+        }
+
+        temperatureButton.setOnClickListener {
+            bleViewModel.readTemperature()
+        }
+
+        sendvalueButton.setOnClickListener {
+            bleViewModel.sendInteger(sendvalueInput.text.toString().toInt())
+        }
+
         //ble events
         bleViewModel.isConnected.observe(this, { updateGui() })
+
+        bleViewModel.temperatureValue.observe(this, {updateValue()})
+        bleViewModel.buttonClickValue.observe(this, {updateValue()})
+        bleViewModel.currenttimeValue.observe(this, {updateValue()})
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -160,7 +199,11 @@ class BleActivity : BaseTemplateActivity() {
 
             //reset display
             scanResultsAdapter.clear()
-            bluetoothScanner.startScan(listOf(uuidFilter), builderScanSettings.build(), leScanCallback)
+            bluetoothScanner.startScan(
+                listOf(uuidFilter),
+                builderScanSettings.build(),
+                leScanCallback
+            )
             Log.d(TAG, "Start scanning...")
             isScanning = true
 
@@ -171,6 +214,12 @@ class BleActivity : BaseTemplateActivity() {
             isScanning = false
             Log.d(TAG, "Stop scanning (manual)")
         }
+    }
+
+    private fun updateValue(){
+        temperatureText.text = bleViewModel.temperatureValue.value
+        currenttimeText.text = bleViewModel.currenttimeValue.value
+        clickCounterText.text = bleViewModel.buttonClickValue.value.toString()
     }
 
     // Device scan callback.
