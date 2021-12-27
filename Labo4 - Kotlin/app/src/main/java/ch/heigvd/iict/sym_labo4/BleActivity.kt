@@ -10,16 +10,19 @@ import android.bluetooth.le.*
 import androidx.lifecycle.ViewModelProvider
 import android.os.Handler
 import android.os.Looper
+import android.os.ParcelUuid
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import java.util.*
 
 /**
  * Project: Labo4
  * Created by fabien.dutoit on 11.05.2019
  * Updated by fabien.dutoit on 06.11.2020
+ * Updated by Berney Alec & Forestier Quentin & Herzig Melvyn on 21.12.2021
  * (C) 2019 - HEIG-VD, IICT
  */
 class BleActivity : BaseTemplateActivity() {
@@ -34,6 +37,17 @@ class BleActivity : BaseTemplateActivity() {
     private lateinit var scanPanel: View
     private lateinit var scanResults: ListView
     private lateinit var emptyScanResults: TextView
+
+    private lateinit var temperatureText: TextView
+    private lateinit var temperatureButton: Button
+
+    private lateinit var clickCounterText: TextView
+
+    private lateinit var currenttimeText: TextView
+    private lateinit var currenttimeButton: Button
+
+    private lateinit var sendvalueInput: EditText
+    private lateinit var sendvalueButton: Button
 
     //menu elements
     private var scanMenuBtn: MenuItem? = null
@@ -60,6 +74,17 @@ class BleActivity : BaseTemplateActivity() {
         scanResults = findViewById(R.id.ble_scanresults)
         emptyScanResults = findViewById(R.id.ble_scanresults_empty)
 
+        temperatureText = findViewById(R.id.ble_temperature_text)
+        temperatureButton = findViewById(R.id.ble_temperature_button)
+
+        clickCounterText = findViewById(R.id.ble_clickcounter_text)
+
+        currenttimeText = findViewById(R.id.ble_currenttime_text)
+        currenttimeButton = findViewById(R.id.ble_currenttime_button)
+
+        sendvalueInput = findViewById(R.id.ble_sendvalue_input)
+        sendvalueButton = findViewById(R.id.ble_sendvalue_button)
+
         //manage scanned item
         scanResultsAdapter = ResultsAdapter(this)
         scanResults.adapter = scanResultsAdapter
@@ -80,8 +105,24 @@ class BleActivity : BaseTemplateActivity() {
             }
         }
 
+        currenttimeButton.setOnClickListener {
+            bleViewModel.setDate(Calendar.getInstance())
+        }
+
+        temperatureButton.setOnClickListener {
+            bleViewModel.readTemperature()
+        }
+
+        sendvalueButton.setOnClickListener {
+            bleViewModel.sendInteger(sendvalueInput.text.toString().toInt())
+        }
+
         //ble events
         bleViewModel.isConnected.observe(this, { updateGui() })
+
+        bleViewModel.temperatureValue.observe(this, {updateValue()})
+        bleViewModel.buttonClickValue.observe(this, {updateValue()})
+        bleViewModel.currenttimeValue.observe(this, {updateValue()})
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -150,13 +191,19 @@ class BleActivity : BaseTemplateActivity() {
             builderScanSettings.setReportDelay(0)
 
             //we scan for any BLE device
-            //we don't filter them based on advertised services...
-            // TODO ajouter un filtre pour n'afficher que les devices proposant
-            // le service "SYM" (UUID: "3c0a1000-281d-4b48-b2a7-f15579a1c38f")
+            //we filter them based on advertised service:
+            //"SYM" (UUID: "3c0a1000-281d-4b48-b2a7-f15579a1c38f")
+            val uuidFilter = ScanFilter.Builder()
+                .setServiceUuid(ParcelUuid.fromString(("3c0a1000-281d-4b48-b2a7-f15579a1c38f")))
+                .build()
 
             //reset display
             scanResultsAdapter.clear()
-            bluetoothScanner.startScan(null, builderScanSettings.build(), leScanCallback)
+            bluetoothScanner.startScan(
+                listOf(uuidFilter),
+                builderScanSettings.build(),
+                leScanCallback
+            )
             Log.d(TAG, "Start scanning...")
             isScanning = true
 
@@ -167,6 +214,12 @@ class BleActivity : BaseTemplateActivity() {
             isScanning = false
             Log.d(TAG, "Stop scanning (manual)")
         }
+    }
+
+    private fun updateValue(){
+        temperatureText.text = bleViewModel.temperatureValue.value
+        currenttimeText.text = bleViewModel.currenttimeValue.value
+        clickCounterText.text = bleViewModel.buttonClickValue.value.toString()
     }
 
     // Device scan callback.
