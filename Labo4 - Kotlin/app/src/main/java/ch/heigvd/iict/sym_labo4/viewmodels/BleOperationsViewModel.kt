@@ -14,8 +14,6 @@ import androidx.lifecycle.MutableLiveData
 import no.nordicsemi.android.ble.BleManager
 import no.nordicsemi.android.ble.data.Data
 import no.nordicsemi.android.ble.observer.ConnectionObserver
-import java.io.ByteArrayInputStream
-import java.time.Year
 import java.util.*
 
 /**
@@ -43,15 +41,6 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
     private var integerChar: BluetoothGattCharacteristic? = null
     private var temperatureChar: BluetoothGattCharacteristic? = null
     private var buttonClickChar: BluetoothGattCharacteristic? = null
-
-    // Services UUID
-    private var symServiceUUID = UUID.fromString("3c0a1000-281d-4b48-b2a7-f15579a1c38f")
-    private var integerUUID = UUID.fromString("3c0a1001-281d-4b48-b2a7-f15579a1c38f")
-    private var temperatureUUID = UUID.fromString("3c0a1002-281d-4b48-b2a7-f15579a1c38f")
-    private var buttonClickUUID = UUID.fromString("3c0a1003-281d-4b48-b2a7-f15579a1c38f")
-
-    private var timeServiceUUID = UUID.fromString("00001805-0000-1000-8000-00805f9b34fb")
-    private var currentTimeUUID = UUID.fromString("00002A2B-0000-1000-8000-00805f9b34fb")
 
 
     override fun onCleared() {
@@ -237,11 +226,11 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
             for (service in services) {
 
                 when (service.uuid) {
-                    timeServiceUUID -> {
+                    TIME_SERVICE_UUID -> {
                         timeService = service
                         initTimeCharacteristics(timeService!!.characteristics)
                     }
-                    symServiceUUID -> {
+                    SYM_SERVICE_UUID -> {
                         symService = service
                         initSYMCharacteristics(symService!!.characteristics)
                     }
@@ -257,7 +246,7 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
         private fun initTimeCharacteristics(characteristics: List<BluetoothGattCharacteristic>) {
             for (char in characteristics) {
                 when (char.uuid) {
-                    currentTimeUUID -> currentTimeChar = char
+                    CURRENT_TIME_UUID -> currentTimeChar = char
                 }
             }
         }
@@ -269,9 +258,9 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
         private fun initSYMCharacteristics(characteristics: List<BluetoothGattCharacteristic>) {
             for (char in characteristics) {
                 when (char.uuid) {
-                    integerUUID -> integerChar = char
-                    buttonClickUUID -> buttonClickChar = char
-                    temperatureUUID -> temperatureChar = char
+                    INTEGER_UUID -> integerChar = char
+                    BUTTON_CLICK_UUID -> buttonClickChar = char
+                    TEMPERATURE_UUID -> temperatureChar = char
                 }
             }
         }
@@ -300,7 +289,7 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
 
             return byteArrayOf(
                 year.toByte(),
-                (year shr 8).toByte(), // year >> 8 en kotlin, on décale les bits
+                (year shr 8).toByte(), // year >> 8 for kotlin, shift right (shr) bits
                 month.toByte(),
                 day.toByte(),
                 hours.toByte(),
@@ -376,6 +365,16 @@ class BleOperationsViewModel(application: Application) : AndroidViewModel(applic
 
     companion object {
         private val TAG = BleOperationsViewModel::class.java.simpleName
+
+        // Services and characteristics UUID
+        private var SYM_SERVICE_UUID = UUID.fromString("3c0a1000-281d-4b48-b2a7-f15579a1c38f")
+        private var INTEGER_UUID = UUID.fromString("3c0a1001-281d-4b48-b2a7-f15579a1c38f")
+        private var TEMPERATURE_UUID = UUID.fromString("3c0a1002-281d-4b48-b2a7-f15579a1c38f")
+        private var BUTTON_CLICK_UUID = UUID.fromString("3c0a1003-281d-4b48-b2a7-f15579a1c38f")
+
+        private var TIME_SERVICE_UUID = UUID.fromString("00001805-0000-1000-8000-00805f9b34fb")
+        private var CURRENT_TIME_UUID = UUID.fromString("00002A2B-0000-1000-8000-00805f9b34fb")
+
     }
 
     init {
