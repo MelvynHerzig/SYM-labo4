@@ -9,13 +9,19 @@
 
     <string name="ble_empty">Veuillez lancer le scan <i>Bluetooth Low Energy</i> en appuyant ci-dessus</string>
 
-    <string name="ble_currenttime_title">Current time</string>
-    <string name="ble_currenttime_set">Set time</string>
-    <string name="ble_clickcounter_title">Click counter</string>
-    <string name="ble_temperature_title">Température</string>
-    <string name="ble_temperature_read">Read</string>
+    <string name="ble_currenttime_title">Partie Date / Heure</string>
+    <string name="ble_currenttime_label">Date / Heure actuelle:</string>
+    <string name="ble_currenttime_button_set">Mettre à jour</string>
 
-    <string name="ble_sendvalue_title">Envoi de valeur</string>
-    <string name="ble_sendvalue_send">Send</string>
+    <string name="ble_clickcounter_title">Partie Compteur de clicks</string>
+    <string name="ble_clickcounter_label">Valeur du compteur de clicks:</string>
+
+    <string name="ble_temperature_title">Partie Température</string>
+    <string name="ble_temperature_label">Température:</string>
+    <string name="ble_temperature_button_read">Lire</string>
+
+    <string name="ble_graphe_title">Partie Graphe</string>
+    <string name="ble_sendvalue_label">Valeur à envoyer:</string>
+    <string name="ble_sendvalue_button_send">Envoyer</string>
 
 </resources>

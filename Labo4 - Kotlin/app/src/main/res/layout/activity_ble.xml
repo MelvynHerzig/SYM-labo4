@@ -19,10 +19,18 @@
 
             <!-- TODO vous placerez dans ce layout toutes les vues nécessaires aux intéractions avec le périphérique BLE -->
 
+            <!-- Temperature part -->
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/ble_temperature_title" />
+                android:text="@string/ble_temperature_title"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ble_temperature_label" />
 
             <TextView
                 android:id="@+id/ble_temperature_text"
@@ -33,23 +41,40 @@
                 android:id="@+id/ble_temperature_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/ble_temperature_read" />
+                android:text="@string/ble_temperature_button_read" />
 
+            <!-- Click counter part -->
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/ble_clickcounter_title" />
+                android:text="@string/ble_clickcounter_title"
+                android:textSize="18sp"
+                android:layout_marginTop="20dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ble_clickcounter_label" />
 
             <TextView
                 android:id="@+id/ble_clickcounter_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <!-- Current time part -->
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/ble_currenttime_title" />
+                android:text="@string/ble_currenttime_title"
+                android:textSize="18sp"
+                android:layout_marginTop="20dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ble_currenttime_label" />
 
             <TextView
                 android:id="@+id/ble_currenttime_text"
@@ -60,12 +85,22 @@
                 android:id="@+id/ble_currenttime_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/ble_currenttime_set" />
+                android:text="@string/ble_currenttime_button_set" />
+
+            <!-- Graph part -->
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/ble_sendvalue_title" />
+                android:text="@string/ble_graphe_title"
+                android:textSize="18sp"
+                android:layout_marginTop="20dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ble_sendvalue_label"
+                />
 
             <EditText
                 android:id="@+id/ble_sendvalue_input"
@@ -76,7 +111,7 @@
                 android:id="@+id/ble_sendvalue_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/ble_sendvalue_send" />
+                android:text="@string/ble_sendvalue_button_send" />
 
 
         </LinearLayout>
